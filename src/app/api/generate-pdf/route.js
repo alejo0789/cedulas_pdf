@@ -45,7 +45,7 @@ export async function POST(req) {
         const imgHeight = 250
 
         // Draw Title
-        page.drawText('Documento de Identidad', {
+        page.drawText('', {
             x: 50,
             y: height - 50,
             size: 20,
