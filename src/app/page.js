@@ -2,11 +2,13 @@
 
 import { useState } from 'react'
 import Camera from '../components/Camera'
+import ImageCropper from '../components/ImageCropper'
 
 export default function Home() {
-    const [step, setStep] = useState('IDLE') // IDLE, CAPTURE_FRONT, CONFIRM_FRONT, CAPTURE_BACK, CONFIRM_BACK, GENERATING, DONE
+    const [step, setStep] = useState('IDLE') // IDLE, CAPTURE_FRONT, CROP_FRONT, CONFIRM_FRONT, CAPTURE_BACK, CROP_BACK, CONFIRM_BACK, GENERATING, DONE
     const [frontImage, setFrontImage] = useState(null)
     const [backImage, setBackImage] = useState(null)
+    const [tempImage, setTempImage] = useState(null) // Temporary image for cropping
     const [loading, setLoading] = useState(false)
 
     const startCapture = () => {
@@ -14,12 +16,24 @@ export default function Home() {
     }
 
     const handleFrontCapture = (image) => {
-        setFrontImage(image)
+        setTempImage(image)
+        setStep('CROP_FRONT')
+    }
+
+    const handleFrontCrop = (croppedImage) => {
+        setFrontImage(croppedImage)
+        setTempImage(null)
         setStep('CONFIRM_FRONT')
     }
 
     const handleBackCapture = (image) => {
-        setBackImage(image)
+        setTempImage(image)
+        setStep('CROP_BACK')
+    }
+
+    const handleBackCrop = (croppedImage) => {
+        setBackImage(croppedImage)
+        setTempImage(null)
         setStep('CONFIRM_BACK')
     }
 
@@ -83,7 +97,7 @@ export default function Home() {
                 {step === 'IDLE' && (
                     <div className="text-center">
                         <p className="mb-6">
-                            Este sistema te permite capturar la parte frontal y trasera de tu cédula y generar un PDF listo para imprimir.
+                            Este sistema te permite capturar la parte frontal y trasera de tu cédula, recortarla manualmente y generar un PDF listo para imprimir.
                         </p>
                         <button onClick={startCapture} className="btn text-lg px-8 py-3">
                             Comenzar
@@ -96,6 +110,14 @@ export default function Home() {
                         <h2 className="text-xl mb-4 font-semibold">Capturar Frente</h2>
                         <Camera onCapture={handleFrontCapture} />
                     </div>
+                )}
+
+                {step === 'CROP_FRONT' && tempImage && (
+                    <ImageCropper
+                        imageSrc={tempImage}
+                        onCropComplete={handleFrontCrop}
+                        onCancel={() => setStep('CAPTURE_FRONT')}
+                    />
                 )}
 
                 {step === 'CONFIRM_FRONT' && frontImage && (
@@ -118,6 +140,14 @@ export default function Home() {
                         <h2 className="text-xl mb-4 font-semibold">Capturar Reverso</h2>
                         <Camera onCapture={handleBackCapture} />
                     </div>
+                )}
+
+                {step === 'CROP_BACK' && tempImage && (
+                    <ImageCropper
+                        imageSrc={tempImage}
+                        onCropComplete={handleBackCrop}
+                        onCancel={() => setStep('CAPTURE_BACK')}
+                    />
                 )}
 
                 {step === 'CONFIRM_BACK' && backImage && (

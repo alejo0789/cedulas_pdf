@@ -54,7 +54,7 @@ export async function POST(req) {
         })
 
         // Draw Front Image
-        page.drawText('Frente:', {
+        page.drawText('', {
             x: 50,
             y: height - 100,
             size: 14,
@@ -74,7 +74,7 @@ export async function POST(req) {
         // Draw Back Image
         const secondSectionY = height - 120 - frontDims.height - 50
 
-        page.drawText('Reverso:', {
+        page.drawText('', {
             x: 50,
             y: secondSectionY,
             size: 14,

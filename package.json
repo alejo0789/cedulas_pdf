@@ -14,6 +14,7 @@
     "pdfkit": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-image-crop": "^11.0.10",
     "react-webcam": "^7.2.0"
   },
   "description": "",
