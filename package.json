@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "latest",
+    "next": "^16.0.10",
     "pdf-lib": "^1.17.1",
     "pdfkit": "latest",
     "react": "latest",
